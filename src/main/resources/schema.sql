@@ -30,8 +30,8 @@ CREATE TABLE receipt (
      amount DECIMAL(10,2) NOT NULL,
      comitee_id INT NOT NULL,
      name VARCHAR(100) NOT NULL,
-     description varbinary(max) NOT NULL,
-     onlineuser_id INT NOT NULL,
+     description varchar(1000) NOT NULL,
+     onlineuser_id VARCHAR(55) NOT NULL,
 
 );
 
@@ -90,7 +90,7 @@ ALTER TABLE economicrequestreview ADD CONSTRAINT economicrequestreview_fk1 FOREI
 
 ALTER TABLE receipt ADD CONSTRAINT receipt_fk0 FOREIGN KEY (comitee_id) REFERENCES committee(id);
 
-ALTER TABLE receipt ADD CONSTRAINT receipt_fk1 FOREIGN KEY (onlineuser_id) REFERENCES onlineuser(id);
+ALTER TABLE receipt ADD CONSTRAINT receipt_fk1 FOREIGN KEY (onlineuser_id) REFERENCES onlineuser(onlineId);
 
 ALTER TABLE attachment ADD CONSTRAINT attachment_fk0 FOREIGN KEY (receipt_id) REFERENCES receipt(id);
 
