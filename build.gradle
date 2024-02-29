@@ -36,7 +36,7 @@ dependencies {
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
-
+    implementation group: 'org.jboss.logging', name: 'jboss-logging', version: '3.5.3.Final'
 }
 
 tasks.withType(KotlinCompile) {
