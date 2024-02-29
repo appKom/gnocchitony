@@ -15,18 +15,8 @@ class EconomicrequestService {
         economicrequestRepository.save(economicrequest)
     }
 
-    fun deleteEconomicrequest(id: Int) {
-        economicrequestRepository.deleteById(id);
-    }
-
-    fun getEconomicrequest(id: Int): Economicrequest {
-        return economicrequestRepository.findById(id).get();
-    }
-
-    fun updateEconomicrequest(economicrequest: Economicrequest, id: Int) {
-       val economicrequestToUpdate = economicrequestRepository.findById(id).get();
-        economicrequest.id = economicrequestToUpdate.id;
-        economicrequestRepository.save(economicrequest);
+    fun getAllEconomicrequests() : List<Economicrequest> {
+        return economicrequestRepository.findAll();
     }
 
 }

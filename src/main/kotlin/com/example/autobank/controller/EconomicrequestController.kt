@@ -23,9 +23,9 @@ class EconomicrequestController() {
         economicrequestService.createEconomicrequest(economicrequest);
     }
 
-    @GetMapping("/get/{id}")
-    fun getEconomicrequest(@PathVariable id: Int): Economicrequest {
-        return economicrequestService.getEconomicrequest(id);
+    @GetMapping("/getall")
+    fun getAllEconomicrequests() : List<Economicrequest> {
+        return economicrequestService.getAllEconomicrequests();
     }
 
 }
