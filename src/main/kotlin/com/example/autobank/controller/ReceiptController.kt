@@ -19,9 +19,9 @@ class ReceiptController() {
     fun createReceipt(@RequestBody receipt: Receipt) : ResponseEntity<String> {
         try {
             receiptService.createReceipt(receipt);
-            return ResponseEntity.ok("Economic request created");
+            return ResponseEntity.ok("Receipt request created");
         } catch (e: Exception) {
-            return ResponseEntity.status(500).body("Error creating economic request");
+            return ResponseEntity.status(500).body("Error creating receipt request");
         }
     }
 
