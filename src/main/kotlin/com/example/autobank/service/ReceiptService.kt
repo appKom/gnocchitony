@@ -11,4 +11,8 @@ class ReceiptService(private val repository: ReceiptRepository) {
     fun createReceipt(receipt: Receipt) {
         repository.save(receipt)
     }
+
+    fun checkReceipt(receipt: Receipt): Boolean {
+        return repository.existsById(receipt.id)
+    }
 }
