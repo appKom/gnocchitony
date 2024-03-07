@@ -7,6 +7,7 @@ import com.example.autobank.repository.ReceiptRepository
 import com.example.autobank.repository.ReceiptReviewRepository
 import jakarta.transaction.Status
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 
 @Service
 class ReceiptReviewService(private val repository: ReceiptReviewRepository) {
@@ -20,8 +21,9 @@ class ReceiptReviewService(private val repository: ReceiptReviewRepository) {
     }
 
     fun createReceiptReview(status: Boolean, user: OnlineUser, description: String, receipt: Receipt){
-        // val receiptReview = ReceiptReview( recieptId = receipt.id, date = "2017-01-13T17:09:42.4100000", d )
-        //repository.save(receiptReview)
+        val dato = LocalDateTime.now()
+        val receiptReview = ReceiptReview( receiptReviewId = -1, recieptId = receipt.id, date = dato, adminID = user.onlineId, description = description, status = status )
+        repository.save(receiptReview)
     }
 
     fun updateReceiptReviewByStatus(receiptReview: ReceiptReview, status: Boolean){

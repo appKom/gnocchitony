@@ -50,7 +50,7 @@ class AdminController(@Autowired val adminService: AdminService, @Autowired val 
                     val receiptReview = receiptReviewService.getReceiptReview(approveReceiptBody.receipt)
                     receiptReviewService.updateReceiptReviewByStatus(receiptReview, approveReceiptBody.status)
                 }else {
-                    receiptReviewService.addReceiptReview()
+                    receiptReviewService.createReceiptReview(status = approveReceiptBody.status, receipt = approveReceiptBody.receipt, user = approveReceiptBody.user, description = approveReceiptBody.description)
                 }
             }
         }
