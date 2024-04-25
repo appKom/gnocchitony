@@ -41,7 +41,7 @@ class Economicrequest (
         @Column(name = "otherinformation")
         val otherInformation: String?,
 
-        @Column(name = "onlineuser_id")
+        @Column(name = "onlineuserId")
         val onlineUserId: Int?,
 
 

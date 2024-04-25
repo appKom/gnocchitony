@@ -3,6 +3,7 @@ package com.example.autobank.controller
 import com.example.autobank.data.Economicrequest
 import com.example.autobank.data.user.OnlineUser
 import com.example.autobank.service.AdminService
+import com.example.autobank.service.AuthService
 import com.example.autobank.service.EconomicRequestReviewService
 import com.example.autobank.service.EconomicrequestService
 import org.springframework.beans.factory.annotation.Autowired
@@ -11,7 +12,8 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/admin")
-class AdminController(@Autowired val adminService: AdminService, @Autowired val economicrequest: EconomicrequestService, @Autowired val economicRequestReviewService: EconomicRequestReviewService) {
+class AdminController(@Autowired val authService: AuthService, @Autowired val adminService: AdminService, @Autowired val economicrequest: EconomicrequestService, @Autowired val economicRequestReviewService: EconomicRequestReviewService) {
+
     @GetMapping("/all")
     fun getAdmins(): ResponseEntity<Any>{
         val admins = adminService.getAdmins()
@@ -35,7 +37,7 @@ class AdminController(@Autowired val adminService: AdminService, @Autowired val 
             val description: String
     )
 
-    @PostMapping("/request")
+    @PutMapping("/request")
     fun approveRequest(@RequestBody requestBody: ApproveEconomicRequestBody){
         if (adminService.checkIfAdmin(requestBody.user)){
             if (economicRequestReviewService.checkIfRequest(requestBody.economicrequest)){
