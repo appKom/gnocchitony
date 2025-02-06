@@ -50,6 +50,10 @@ class AuthenticationService {
         }
     }
 
+    fun getFullName(): String {
+       return "";
+    }
+
     fun getAccessToken(): String {
         val authentication = SecurityContextHolder.getContext().authentication
         return if (authentication is JwtAuthenticationToken) {

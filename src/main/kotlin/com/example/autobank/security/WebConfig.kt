@@ -9,8 +9,8 @@ class WebConfig : WebMvcConfigurer {
 
     override fun addCorsMappings(registry: CorsRegistry) {
         registry.addMapping("/**")
-            .allowedOrigins("http://localhost:3000", "https://autobank-frontend.vercel.app") // Add your frontend URL here e.
-            .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+            .allowedOrigins("http://localhost:3000", "https://autobank-frontend.vercel.app")
+            .allowedMethods("GET", "POST")
             .allowedHeaders("*")
             .allowCredentials(true)
             .maxAge(3600)

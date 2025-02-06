@@ -32,11 +32,11 @@ class OnlineUserService(
             try {
                 createOnlineUser()
             } catch (e: Exception) {
-                return AuthenticatedUserResponse(success = false, false, false, null)
+                return AuthenticatedUserResponse(success = false, false, false, null, "")
             }
         }
 
-        return AuthenticatedUserResponse(success = true, authenticationService.checkBankomMembership(), authenticationService.checkSuperAdmin(), expiresat = authenticationService.getExpiresAt())
+        return AuthenticatedUserResponse(success = true, authenticationService.checkBankomMembership(), authenticationService.checkSuperAdmin(), expiresat = authenticationService.getExpiresAt(), fullname = authenticationService.getFullName())
     }
 
     fun createOnlineUser(): OnlineUser {
