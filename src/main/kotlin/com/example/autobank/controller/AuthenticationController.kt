@@ -6,13 +6,10 @@ import com.example.autobank.service.AuthenticationService
 import com.example.autobank.service.OnlineUserService
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.http.ResponseCookie
-
+import org.springframework.web.bind.annotation.*
 
 
 @RestController
@@ -27,13 +24,13 @@ class AuthenticationController {
 
     @GetMapping("/setuser")
     fun setCookie(@RequestHeader("Authorization") authHeader: String): ResponseEntity<Any> {
-        val token = authHeader.replace("Bearer ", "") // Extract token from the header
+        val token = authHeader.replace("Bearer ", "")
 
         val cookie = ResponseCookie.from("access_token", token)
             .httpOnly(true)
             .secure(true)
             .path("/")
-            .maxAge(12 * 60 * 60)
+            .maxAge(60)
             .build()
 
         return ResponseEntity.ok()
@@ -42,11 +39,21 @@ class AuthenticationController {
     }
 
     @GetMapping("/getuser")
-    fun checkUser(): ResponseEntity<AuthenticatedUserResponse> {
+    fun checkUser(@CookieValue("access_token") token: String?): ResponseEntity<AuthenticatedUserResponse> {
+        if (token.isNullOrEmpty()) {
+            return ResponseEntity.status(401).build()
+        }
+
         println("Checking user")
+        val cookie = ResponseCookie.from("access_token", token)
+            .httpOnly(true)
+            .secure(true)
+            .path("/")
+            .maxAge(authenticationService.getSecondsUntilExpiration())
+            .build()
 
             return try {
-                ResponseEntity.ok(onlineUserService.checkUser())
+                ResponseEntity.ok().header("Set-Cookie", cookie.toString()).body(onlineUserService.checkUser())
             } catch (e: Exception) {
                 print(e)
                 ResponseEntity.badRequest().build();

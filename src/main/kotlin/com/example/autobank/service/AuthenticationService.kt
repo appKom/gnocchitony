@@ -40,6 +40,15 @@ class AuthenticationService {
         return Auth0User("sub", "email", "name")
     }
 
+    fun getSecondsUntilExpiration(): Long {
+        val expiresAt = getExpiresAt()
+        return if (expiresAt != null) {
+            expiresAt.epochSecond - Instant.now().epochSecond
+        } else {
+            0
+        }
+    }
+
     fun getUserSub(): String {
         val authentication = SecurityContextHolder.getContext().authentication
         return if (authentication is JwtAuthenticationToken) {
