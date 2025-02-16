@@ -9,10 +9,12 @@ import com.example.autobank.repository.receipt.CardRepository
 import com.example.autobank.repository.receipt.PaymentRepository
 import com.example.autobank.repository.receipt.ReceiptInfoViewRepository
 import com.example.autobank.repository.receipt.ReceiptRepository
+import com.example.autobank.repository.receipt.specification.ReceiptInfoSpecification
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort
 
 @Service
 
@@ -90,13 +92,25 @@ class ReceiptService {
 
     }
 
-    fun getAllReceiptsFromUser(from: Int, count: Int): List<ReceiptInfo>? {
+    fun getAllReceiptsFromUser(from: Int, count: Int, status: String?, committeeName: String?, search: String?, sortField: String?, sortOrder: String?): ReceiptListResponseBody? {
+
+
         val user = onlineUserService.getOnlineUser() ?: throw Exception("User not found")
 
-        val pageable = PageRequest.of(from, count)
-        val page: Page<ReceiptInfo> = receiptInfoViewRepository.findByUserId(pageable, user.id)
 
-        return page.toList()
+        val sort = if (!sortField.isNullOrEmpty()) {
+            Sort.by(Sort.Direction.fromString(sortOrder ?: "ASC"), sortField)
+        } else {
+            Sort.by(Sort.Direction.DESC, "receiptCreatedAt")
+        }
+        val pageable = PageRequest.of(from, count, sort)
+
+        val specification = ReceiptInfoSpecification(user.id, status, committeeName, search)
+
+        val page: List<ReceiptInfo> = receiptInfoViewRepository.findAll(specification, pageable).toList()
+        val total: Long = receiptInfoViewRepository.count(specification)
+
+        return ReceiptListResponseBody(page.toTypedArray(), total)
     }
 
     fun getReceipt(id: Int): CompleteReceipt? {

@@ -5,6 +5,7 @@ import org.springframework.data.jpa.domain.Specification
 import jakarta.persistence.criteria.Predicate
 
 class ReceiptInfoSpecification(
+    private val userId: Int?,
     private val status: String?,
     private val committeeName: String?,
     private val search: String?
@@ -15,6 +16,11 @@ class ReceiptInfoSpecification(
         criteriaBuilder: jakarta.persistence.criteria.CriteriaBuilder
     ): Predicate? {
         val predicates = mutableListOf<Predicate>()
+
+        if (userId != null) {
+            predicates.add(criteriaBuilder.equal(root.get<Int>("userId"), userId))
+        }
+
 
 
         if (status == "NONE") {

@@ -40,10 +40,9 @@ class ReceiptController {
     /*  */
 
     @GetMapping("/getall")
-    fun getAllReceipts(@Param("page") from: Int, @Param("count") count: Int): ResponseEntity<List<ReceiptInfo>> {
-
+    fun getAllReceipts(@Param("page") from: Int = 0, @Param("count") count: Int = 10, @Param("status") status: String?, @Param("committee") committee: String?, @Param("search") search: String?, @Param("sortOrder") sortOrder: String?, @Param("sortField") sortField: String?): ResponseEntity<ReceiptListResponseBody> {
         return try {
-            val res = receiptService.getAllReceiptsFromUser(from, count)
+            val res = receiptService.getAllReceiptsFromUser(from, count, status, committee, search, sortField, sortOrder)
             ResponseEntity.ok(res)
         } catch (e: Exception) {
             ResponseEntity.badRequest().build()

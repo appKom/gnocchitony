@@ -33,34 +33,36 @@ class AdminReceiptController {
 
 
     @GetMapping("/all")
-    fun getAllReceipts(@Param("page") from: Int, @Param("count") count: Int, @Param("status") status: String?, @Param("committee") committee: String?, @Param("search") search: String?, @Param("sortOrder") sortOrder: String?, @Param("sortField") sortField: String?): ResponseEntity<ReceiptListResponseBody> {
-        if (!authenticationService.checkBankomMembership()) {
-            return ResponseEntity.status(403).build()
+    fun getAllReceipts(@Param("page") from: Int = 0, @Param("count") count: Int = 10, @Param("status") status: String?, @Param("committee") committee: String?, @Param("search") search: String?, @Param("sortOrder") sortOrder: String?, @Param("sortField") sortField: String?): ResponseEntity<ReceiptListResponseBody> {
+        if (authenticationService.checkBankomMembership()) {
+            return ResponseEntity.ok(receiptAdminService.getAll(from, count, status, committee, search, sortField, sortOrder))
         }
+        return ResponseEntity.status(403).build()
 
-        return ResponseEntity.ok(receiptAdminService.getAll(from, count, status, committee, search, sortField, sortOrder))
     }
 
     @GetMapping("/get/{id}")
     fun getReceipt(@PathVariable id: Int): ResponseEntity<CompleteReceipt> {
-        if (!authenticationService.checkBankomMembership()) {
-            return ResponseEntity.status(403).build()
-        }
+        if (authenticationService.checkBankomMembership()) {
+            return ResponseEntity.ok(receiptAdminService.getReceipt(id))
 
-        return ResponseEntity.ok(receiptAdminService.getReceipt(id))
+        }
+        return ResponseEntity.status(403).build()
+
+
     }
 
     @PostMapping("/review")
     fun reviewReceipt(@RequestBody reviewBody: ReceiptReviewRequestBody): ResponseEntity<ReceiptReview> {
-        if (!authenticationService.checkBankomMembership()) {
-            return ResponseEntity.status(403).build()
+        if (authenticationService.checkBankomMembership()) {
+            try {
+                return ResponseEntity.ok(receiptReviewService.createReceiptReview(reviewBody));
+            } catch (e: Exception) {
+                println(e)
+                return ResponseEntity.badRequest().build()
+            }
         }
-        try {
-            return ResponseEntity.ok(receiptReviewService.createReceiptReview(reviewBody));
-        } catch (e: Exception) {
-            println(e)
-            return ResponseEntity.badRequest().build()
-        }
+        return ResponseEntity.status(403).build()
 
     }
 

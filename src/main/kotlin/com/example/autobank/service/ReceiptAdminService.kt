@@ -31,7 +31,7 @@ class ReceiptAdminService {
 
         val pageable = PageRequest.of(from, count, sort)
 
-        val specification = ReceiptInfoSpecification(status, committeeName, search)
+        val specification = ReceiptInfoSpecification(null, status, committeeName, search)
 
         val receipts: List<ReceiptInfo> = receiptInfoViewRepository.findAll(specification, pageable).toList()
 

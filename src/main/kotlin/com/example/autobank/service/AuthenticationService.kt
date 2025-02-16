@@ -135,7 +135,7 @@ class AuthenticationService {
     }
 
     fun checkBankomMembership(): Boolean {
-        if (environment != "prod") {
+        if (environment == "dev") {
             return true
         }
 
