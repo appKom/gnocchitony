@@ -7,6 +7,7 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.9.22'
     id 'org.jetbrains.kotlin.plugin.spring' version '1.9.22'
     id 'org.jetbrains.kotlin.plugin.jpa' version '1.9.22'
+
 }
 
 group = 'com.example'
@@ -16,10 +17,26 @@ java {
     sourceCompatibility = '17'
 }
 
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'com.example.autobank.AutobankApplicationKt'
+        )
+    }
+}
+
 bootJar {
     archiveBaseName = 'autobank-image'
     archiveVersion = ''
-    mainClass = 'com.example.autobank.AutobankApplicationKt'  // Kotlin class with 'Kt' suffix
+    mainClass = 'com.example.autobank.AutobankApplicationKt'
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'com.example.autobank.AutobankApplicationKt'
+        )
+    }
 }
 
 repositories {
@@ -48,12 +65,10 @@ dependencies {
 
     implementation 'com.azure:azure-storage-blob:12.27.1'
     implementation 'net.coobird:thumbnailator:0.4.20'
-
-
-
-
-
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.8.10"
 }
+
+
 
 tasks.withType(KotlinCompile) {
     kotlinOptions {
