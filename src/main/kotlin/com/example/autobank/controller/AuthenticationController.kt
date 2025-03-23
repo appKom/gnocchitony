@@ -18,60 +18,14 @@ class AuthenticationController {
     @Autowired
     lateinit var onlineUserService: OnlineUserService;
 
-
-    @Autowired
-    lateinit var authenticationService: AuthenticationService;
-
-    @GetMapping("/setuser")
-    fun setCookie(@RequestHeader("Authorization") authHeader: String): ResponseEntity<Any> {
-        val token = authHeader.replace("Bearer ", "")
-
-        val cookie = ResponseCookie.from("access_token", token)
-            .httpOnly(true)
-            .secure(true)
-            .path("/")
-            .maxAge(60)
-            .build()
-
-        return ResponseEntity.ok()
-            .header("Set-Cookie", cookie.toString())
-            .body(mapOf("success" to true))
-    }
-
     @GetMapping("/getuser")
-    fun checkUser(@CookieValue("access_token") token: String?): ResponseEntity<AuthenticatedUserResponse> {
-        if (token.isNullOrEmpty()) {
-            return ResponseEntity.status(401).build()
-        }
-
-        println("Checking user")
-        val cookie = ResponseCookie.from("access_token", token)
-            .httpOnly(true)
-            .secure(true)
-            .path("/")
-            .maxAge(authenticationService.getSecondsUntilExpiration())
-            .build()
-
+    fun checkUser(): ResponseEntity<AuthenticatedUserResponse> {
             return try {
-                ResponseEntity.ok().header("Set-Cookie", cookie.toString()).body(onlineUserService.checkUser())
+                ResponseEntity.ok().body(onlineUserService.checkUser())
             } catch (e: Exception) {
                 print(e)
                 ResponseEntity.badRequest().build();
             }
         }
-
-    @GetMapping("/logout")
-    fun logout(request: HttpServletRequest): ResponseEntity<Any> {
-        val cookie = ResponseCookie.from("access_token", "")
-            .httpOnly(true)
-            .secure(false)
-            .path("/")
-            .maxAge(0)
-            .build()
-
-        return ResponseEntity.ok()
-            .header("Set-Cookie", cookie.toString())
-            .body(mapOf("success" to true))
-    }
     
 }
