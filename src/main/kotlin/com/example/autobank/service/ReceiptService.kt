@@ -27,7 +27,7 @@ class ReceiptService {
     lateinit var receiptRepository: ReceiptRepository
 
     @Autowired
-    lateinit var imageService: ImageService
+    lateinit var blobService: BlobService
 
     @Autowired
     lateinit var attachmentService: AttachmentService
@@ -57,20 +57,24 @@ class ReceiptService {
         /**
          * Save attachments
          */
+
         val attachments = receiptRequestBody.attachments
         val attachmentsnames = mutableListOf<String>()
-        attachments.forEach { attachment ->
-            val imgname = imageService.uploadImage(attachment)
-            attachmentService.createAttachment(Attachment(0, storedReceipt.id, imgname))
-            attachmentsnames.add(imgname)
+        try {
+            attachments.forEach { attachment ->
+                val imgname = blobService.uploadFile(attachment)
+                attachmentService.createAttachment(Attachment(0, storedReceipt.id, imgname))
+                println("Attachent name: $imgname")
+                attachmentsnames.add(imgname)
+            }
+        } catch (e: Exception) {
+            receiptRepository.delete(storedReceipt)
+            throw e;
         }
 
         /**
          * Save payment information
          */
-        println(receiptRequestBody.receiptPaymentInformation?.cardnumber != null)
-        println(receiptRequestBody.receiptPaymentInformation?.cardnumber != "")
-        println(receiptRequestBody.receiptPaymentInformation?.usedOnlineCard)
         if (receiptRequestBody.receiptPaymentInformation != null && receiptRequestBody.receiptPaymentInformation.usedOnlineCard && receiptRequestBody.receiptPaymentInformation.cardnumber != null && receiptRequestBody.receiptPaymentInformation.cardnumber != "") {
             val card = Card(0, storedReceipt.id, receiptRequestBody.receiptPaymentInformation.cardnumber)
             cardRepository.save(card)
@@ -139,9 +143,9 @@ class ReceiptService {
         }
         println(receipt.paymentOrCard)
 
-        // Get images
+        // Get files
         val attachments = attachmentService.getAttachmentsByReceiptId(receipt.receiptId)
-        val images = attachments.map { attachment -> imageService.downloadImage(attachment.name) }
+        val files = attachments.map { attachment -> attachment.name.split(".")[1]+"."+blobService.downloadImage(attachment.name) }
 
         return CompleteReceipt(
             receipt.receiptId,
@@ -158,7 +162,7 @@ class ReceiptService {
             receipt.latestReviewComment,
             payment.account_number,
             card.card_number,
-            images
+            files
         )
 
 
