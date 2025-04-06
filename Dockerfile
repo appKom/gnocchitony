@@ -4,7 +4,6 @@ WORKDIR /app
 
 COPY . .
 
-
 RUN cp src/main/resources/application.properties.template src/main/resources/application.properties
 
 RUN ./gradlew clean bootJar
@@ -16,6 +15,5 @@ WORKDIR /app
 COPY --from=build /app/build/libs/*.jar app.jar
 
 EXPOSE 8080
-
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
