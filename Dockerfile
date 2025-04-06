@@ -3,9 +3,9 @@ FROM gradle:8-jdk-alpine AS build
 WORKDIR /app
 
 COPY . .
-
+RUN echo "copying..."
 RUN cp src/main/resources/application.properties.template src/main/resources/application.properties
-
+RUN echo "copied...."
 RUN ./gradlew clean bootJar
 
 FROM openjdk:17
