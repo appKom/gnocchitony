@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort
+import com.example.autobank.service.MailService
 
 @Service
 
@@ -44,6 +45,9 @@ class ReceiptService {
     @Autowired
     lateinit var paymentCardService: PaymentCardService
 
+    @Autowired
+    lateinit var mailService: MailService
+
 
 
     fun createReceipt(receiptRequestBody: ReceiptRequestBody): ReceiptResponseBody {
@@ -52,7 +56,6 @@ class ReceiptService {
         receiptinfo.onlineUserId = user.id;
 
         val storedReceipt = receiptRepository.save(receiptinfo);
-
 
         /**
          * Save attachments
@@ -87,13 +90,27 @@ class ReceiptService {
 
         storedReceipt.onlineUserId = null
 
+        val emailContent = """
+            <h2>Detaljer for innsendt kvittering</h2>
+            <p><strong>Bruker:</strong> ${user.fullname}</p>
+            <p><strong>Brukerens e-post:</strong> ${user.email}</p>
+            <p><strong>Kvitterings-ID:</strong> ${storedReceipt.id}</p>
+            <p><strong>Beløp:</strong> ${storedReceipt.amount}</p>
+            <p><strong>Komité-ID:</strong> ${storedReceipt.committee_id}</p>
+            <p><strong>Anledning:</strong> ${storedReceipt.name}</p>
+            <p><strong>Beskrivelse:</strong> ${storedReceipt.description}</p>
+            <p><strong>Betalingsmetode:</strong> ${if (receiptRequestBody.receiptPaymentInformation.usedOnlineCard) "Online-kort" else "Bankoverføring"}</p>
+            <p><strong>Kontonummer:</strong> ${receiptRequestBody.receiptPaymentInformation.accountnumber ?: "Ikke oppgitt"}</p>
+        """.trimIndent()
+
+        mailService.sendEmail(user.email, "Receipt Submission Details", emailContent)
+
         val response = ReceiptResponseBody()
         response.receipt = storedReceipt
         response.attachments = attachmentsnames.toTypedArray()
         response.receiptPaymentInformation = receiptRequestBody.receiptPaymentInformation
 
         return response
-
     }
 
     fun getAllReceiptsFromUser(from: Int, count: Int, status: String?, committeeName: String?, search: String?, sortField: String?, sortOrder: String?): ReceiptListResponseBody? {
