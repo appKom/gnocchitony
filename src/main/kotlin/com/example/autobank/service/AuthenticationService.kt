@@ -24,7 +24,7 @@ class AuthenticationService {
 
     private val fetchUserCommitteesUrl = "https://old.online.ntnu.no/api/v1/group/online-groups/?members__user="
 
-    private val adminCommitteeNameLong = "Applikasjonskomiteen" // Temporarily appkom
+    private val adminCommitteeNameLong = "Bank- og økonomikomiteen" //"Applikasjonskomiteen" // Temporarily appkom
 
     @Value("\${auth0.domain}")
     private val domain: String = ""

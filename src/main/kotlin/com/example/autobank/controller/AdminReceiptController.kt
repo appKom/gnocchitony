@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import com.example.autobank.data.ReceiptReviewRequestBody
 import com.example.autobank.data.receipt.ReceiptListResponseBody
 import com.example.autobank.data.models.ReceiptReview
+import com.example.autobank.data.receipt.ReceiptReviewResponseBody
 import com.example.autobank.service.ReceiptReviewService
 import org.springframework.data.repository.query.Param
 
@@ -53,7 +54,7 @@ class AdminReceiptController {
     }
 
     @PostMapping("/review")
-    fun reviewReceipt(@RequestBody reviewBody: ReceiptReviewRequestBody): ResponseEntity<ReceiptReview> {
+    fun reviewReceipt(@RequestBody reviewBody: ReceiptReviewRequestBody): ResponseEntity<ReceiptReviewResponseBody> {
         if (authenticationService.checkBankomMembership()) {
             try {
                 return ResponseEntity.ok(receiptReviewService.createReceiptReview(reviewBody));

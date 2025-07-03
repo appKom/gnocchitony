@@ -3,8 +3,8 @@ package com.example.autobank.data.user
 import jakarta.persistence.*
 
 
-@Entity
-@Table(name = "admin")
+//@Entity
+//@Table(name = "admin")
 class Admin(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

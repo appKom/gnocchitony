@@ -66,6 +66,9 @@ dependencies {
     implementation 'com.azure:azure-storage-blob:12.27.1'
     implementation 'net.coobird:thumbnailator:0.4.20'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:1.8.10"
+    implementation 'com.mysql:mysql-connector-j:9.3.0'
+
+
 }
 
 

@@ -33,6 +33,7 @@ class ReceiptController {
             val res = receiptService.getAllReceiptsFromUser(from, count, status, committee, search, sortField, sortOrder)
             ResponseEntity.ok(res)
         } catch (e: Exception) {
+            e.printStackTrace()
             ResponseEntity.badRequest().build()
         }
     }

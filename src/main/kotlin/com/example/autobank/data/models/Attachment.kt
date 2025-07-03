@@ -12,8 +12,9 @@ class Attachment(
     @NotNull
     val id: Int,
 
-    @Column(name = "receipt_id")
-    val receiptId: Int,
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "receipt_id", nullable = false)
+    val receipt: Receipt,
 
     @Column(name = "name")
     val name: String,

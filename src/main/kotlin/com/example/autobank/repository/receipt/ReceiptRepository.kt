@@ -6,7 +6,9 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface ReceiptRepository : JpaRepository<Receipt, Int> {
-    fun findAllByOnlineUserId(onlineUserId: Int): List<Receipt>
+    fun findAllByUserId(onlineUserId: Int): List<Receipt>
+
+
 
 
 

@@ -1,9 +1,14 @@
 package com.example.autobank.data.models
 
+import com.example.autobank.data.user.OnlineUser
 import jakarta.persistence.*
 import org.hibernate.annotations.CreationTimestamp
 import org.jetbrains.annotations.NotNull
 import java.time.LocalDateTime
+
+enum class ReceiptStatus {
+    APPROVED, DENIED
+}
 
 @Entity
 @Table(name = "receiptreview")
@@ -14,17 +19,23 @@ class ReceiptReview (
     @NotNull
     val id: Int,
 
-    @Column(name = "receipt_id")
-    val receiptId: Int,
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "receipt_id", nullable = false)
+    val receipt: Receipt,
+
 
     @Column(name = "status")
-    val status: String,
+    @Enumerated(EnumType.STRING)
+    val status: ReceiptStatus,
 
     @Column(name = "comment")
     val comment: String,
 
-    @Column(name = "onlineuser_id")
-    var onlineUserId: Int,
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "onlineuser_id")
+    val user: OnlineUser,
+
 
     @CreationTimestamp
     @Column(name = "createdat")

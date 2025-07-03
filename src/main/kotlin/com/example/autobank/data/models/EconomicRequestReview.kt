@@ -1,30 +1,40 @@
 package com.example.autobank.data.models
 
+
+
 import jakarta.persistence.*
+import org.hibernate.annotations.CreationTimestamp
+import org.jetbrains.annotations.NotNull
 import java.time.LocalDateTime
 
-@Entity
-@Table(name = "economicRequestReview")
-class EconomicRequestReview(
+enum class EconomicRequestStatus {
+    APPROVED, DENIED
+}
 
+@Entity
+@Table(name = "economicrequestreview")
+class EconomicRequestReview (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "economicRequestReviewId", nullable = false)
-    val economicRequestReviewId: Int,
+    @Column(name = "id")
+    @NotNull
+    val id: Int,
 
-    @Column(name = "economicRequestId", nullable = false)
-    val economicRequestId: Int,
+    @Column(name = "economicrequest_id")
+    val economicrequestId: Int,
 
-    @Column(name = "date", nullable = false)
-    val date: LocalDateTime,
 
-    @Column(name = "adminId", nullable = false)
-    val adminID: String,
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    val status: EconomicRequestStatus,
 
-    @Column(name = "description", nullable = true)
-    val description: String?,
+    @Column(name = "comment")
+    val comment: String,
 
-    @Column(name = "status", nullable = true)
-    var status: Boolean?
+    @Column(name = "onlineuser_id")
+    var onlineUserId: Int,
 
+    @CreationTimestamp
+    @Column(name = "createdat")
+    val createdat: LocalDateTime?,
 )
