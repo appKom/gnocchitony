@@ -35,7 +35,7 @@ class AdminReceiptController {
 
     @GetMapping("/all")
     fun getAllReceipts(@Param("page") from: Int = 0, @Param("count") count: Int = 10, @Param("status") status: String?, @Param("committee") committee: String?, @Param("search") search: String?, @Param("sortOrder") sortOrder: String?, @Param("sortField") sortField: String?): ResponseEntity<ReceiptListResponseBody> {
-        if (authenticationService.checkBankomMembership()) {
+        if (authenticationService.checkAdmin()) {
             return ResponseEntity.ok(receiptAdminService.getAll(from, count, status, committee, search, sortField, sortOrder))
         }
         return ResponseEntity.status(403).build()
@@ -44,7 +44,7 @@ class AdminReceiptController {
 
     @GetMapping("/get/{id}")
     fun getReceipt(@PathVariable id: Int): ResponseEntity<CompleteReceipt> {
-        if (authenticationService.checkBankomMembership()) {
+        if (authenticationService.checkAdmin()) {
             return ResponseEntity.ok(receiptAdminService.getReceipt(id))
 
         }
@@ -55,7 +55,7 @@ class AdminReceiptController {
 
     @PostMapping("/review")
     fun reviewReceipt(@RequestBody reviewBody: ReceiptReviewRequestBody): ResponseEntity<ReceiptReviewResponseBody> {
-        if (authenticationService.checkBankomMembership()) {
+        if (authenticationService.checkAdmin()) {
             try {
                 return ResponseEntity.ok(receiptReviewService.createReceiptReview(reviewBody));
             } catch (e: Exception) {
