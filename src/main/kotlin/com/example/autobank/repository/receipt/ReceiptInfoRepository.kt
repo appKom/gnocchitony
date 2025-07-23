@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.domain.Specification
 
 interface ReceiptInfoRepository {
-    fun findById(id: Int): ReceiptInfo?
+    fun findById(id: String): ReceiptInfo?
 
     fun findAll(spec: Specification<Receipt>, pageable: Pageable): Page<ReceiptInfo>
 

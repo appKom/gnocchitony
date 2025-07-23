@@ -14,10 +14,10 @@ enum class ReceiptStatus {
 @Table(name = "receiptreview")
 class ReceiptReview (
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
     @NotNull
-    val id: Int,
+    val id: String,
 
 
     @ManyToOne(fetch = FetchType.LAZY)

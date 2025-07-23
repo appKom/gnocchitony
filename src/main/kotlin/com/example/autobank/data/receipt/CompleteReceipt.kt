@@ -4,7 +4,7 @@ import java.math.BigDecimal
 import java.time.LocalDateTime
 
 data class CompleteReceipt(
-    val receiptId: Int,
+    val receiptId: String,
 
     val amount: Double,
 

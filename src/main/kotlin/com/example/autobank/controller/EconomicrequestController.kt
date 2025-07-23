@@ -17,16 +17,6 @@ class EconomicrequestController() {
     @Autowired
     lateinit var authenticationService: AuthenticationService;
 
-    //@PostMapping("/create")
-    fun createEconomicrequest(@RequestBody economicrequest: Economicrequest): ResponseEntity<Economicrequest> {
-        return try {
-            val created: Economicrequest = economicrequestService.createEconomicrequest(economicrequest);
-            created.onlineUserId = null;
-            ResponseEntity.ok(created);
-        } catch (e: Exception) {
-            ResponseEntity.badRequest().build();
-        }
-    }
 
     //@GetMapping("/get/{id}")
     fun getEconomicrequest(@PathVariable id: Int): Economicrequest {

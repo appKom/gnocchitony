@@ -46,7 +46,7 @@ class ReceiptInfoRepositoryImpl(
 
 
         cq.multiselect(
-            root.get<Int>("id"),                                            // receiptId
+            root.get<String>("id"),                                            // receiptId
             root.get<BigDecimal>("amount"),                                 // amount
             root.get<String>("name"),                                       // receiptName
             root.get<String>("description"),                                // receiptDescription
@@ -55,7 +55,7 @@ class ReceiptInfoRepositoryImpl(
             userJoin.get<String>("fullname"),                               // userFullname
             root.get<String>("account_number"),                             // accountNumber
             root.get<String>("card_number"),                                // cardNumber
-            userJoin.get<Int>("id"),                                        // userId
+            userJoin.get<String>("id"),                                        // userId
             cb.countDistinct(attachmentsJoin.get<Int>("id")),               // attachmentCount
             reviewsJoin.get<String>("status"),                              // latestReviewStatus
             reviewsJoin.get<LocalDateTime>("createdat"),                    // latestReviewCreatedAt
@@ -63,7 +63,7 @@ class ReceiptInfoRepositoryImpl(
         )
 
         cq.groupBy(
-            root.get<Int>("id"),
+            root.get<String>("id"),
             root.get<BigDecimal>("amount"),
             root.get<String>("name"),
             root.get<String>("description"),
@@ -72,7 +72,7 @@ class ReceiptInfoRepositoryImpl(
             root.get<String>("account_number"),
             committeeJoin.get<String>("name"),
             userJoin.get<String>("fullname"),
-            userJoin.get<Int>("id"),
+            userJoin.get<String>("id"),
             reviewsJoin.get<String>("status"),
             reviewsJoin.get<LocalDateTime>("createdat"),
             reviewsJoin.get<String>("comment")
@@ -83,9 +83,9 @@ class ReceiptInfoRepositoryImpl(
 
     }
 
-    override fun findById(id: Int): ReceiptInfo? {
+    override fun findById(id: String): ReceiptInfo? {
         val (cb, cq, root) = getJoinedQuery()
-        cq.where(cb.equal(root.get<Int>("id"), id))
+        cq.where(cb.equal(root.get<String>("id"), id))
 
         val query = em.createQuery(cq)
         query.maxResults = 1

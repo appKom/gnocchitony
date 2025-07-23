@@ -58,7 +58,7 @@ class ReceiptService {
 
 
         val receipt: Receipt = Receipt(
-            0,
+            "",
             receiptinfo.amount ?: throw Exception("Amount not provided"),
             committee,
             receiptinfo.name ?: throw Exception("Receipt name not provided"),
@@ -85,7 +85,7 @@ class ReceiptService {
         try {
             attachments.forEach { attachment ->
                 val imgname = blobService.uploadFile(attachment)
-                attachmentService.createAttachment(Attachment(0, storedReceipt, imgname))
+                attachmentService.createAttachment(Attachment("", storedReceipt, imgname))
                 println("Attachent name: $imgname")
                 attachmentsnames.add(imgname)
             }
@@ -139,7 +139,7 @@ class ReceiptService {
         return ReceiptListResponseBody(receiptResponseList.toTypedArray(), total)
     }
 
-    fun getReceipt(id: Int): CompleteReceipt? {
+    fun getReceipt(id: String): CompleteReceipt? {
         val user = onlineUserService.getOnlineUser() ?: throw Exception("User not found")
         val receipt = receiptInfoRepository.findById(id)
         if (receipt == null || receipt.userId != user.id) {

@@ -39,7 +39,7 @@ class ReceiptController {
     }
 
     @GetMapping("/get/{id}")
-    fun getReceipt(@PathVariable id: Int): ResponseEntity<CompleteReceipt> {
+    fun getReceipt(@PathVariable id: String): ResponseEntity<CompleteReceipt> {
         return try {
             val res = receiptService.getReceipt(id)
             ResponseEntity.ok(res)

@@ -4,8 +4,8 @@ import jakarta.persistence.*
 import org.jetbrains.annotations.NotNull
 
 @Entity
-@Table(name = "attachment")
-class Attachment(
+@Table(name = "economicrequestattachment")
+class EconomicRequestAttachment(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
@@ -13,8 +13,8 @@ class Attachment(
     val id: String,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "receipt_id", nullable = false)
-    val receipt: Receipt,
+    @JoinColumn(name = "economicrequest_id", nullable = false)
+    val economicrequest: Economicrequest,
 
     @Column(name = "name")
     val name: String,

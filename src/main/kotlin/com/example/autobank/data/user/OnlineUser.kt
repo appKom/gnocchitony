@@ -7,9 +7,9 @@ import java.time.LocalDateTime
 @Table(name = "onlineuser")
 open class OnlineUser(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
-    open val id: Int,
+    open val id: String,
     @Column(name = "email")
     open val email: String,
     @Column(name = "fullname")

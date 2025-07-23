@@ -8,7 +8,7 @@ import com.example.autobank.data.user.OnlineUser
 import com.example.autobank.data.models.ReceiptReview
 
 class ReceiptInfoViewSpecification(
-    private val userId: Int?,
+    private val userId: String?,
     private val status: String?,
     private val committeeName: String?,
     private val search: String?

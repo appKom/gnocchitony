@@ -2,6 +2,7 @@ package com.example.autobank.data.models
 
 
 
+import com.example.autobank.data.user.OnlineUser
 import jakarta.persistence.*
 import org.hibernate.annotations.CreationTimestamp
 import org.jetbrains.annotations.NotNull
@@ -15,13 +16,14 @@ enum class EconomicRequestStatus {
 @Table(name = "economicrequestreview")
 class EconomicRequestReview (
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
     @NotNull
-    val id: Int,
+    val id: String,
 
-    @Column(name = "economicrequest_id")
-    val economicrequestId: Int,
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "economicrequest_id", nullable = false)
+    val economicrequest: Economicrequest,
 
 
     @Column(name = "status")
@@ -31,8 +33,9 @@ class EconomicRequestReview (
     @Column(name = "comment")
     val comment: String,
 
-    @Column(name = "onlineuser_id")
-    var onlineUserId: Int,
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "onlineuser_id")
+    val user: OnlineUser,
 
     @CreationTimestamp
     @Column(name = "createdat")

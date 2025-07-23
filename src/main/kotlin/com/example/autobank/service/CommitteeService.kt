@@ -24,7 +24,7 @@ class CommitteeService() {
         return UserCommitteeResponseBody(userdetails.name, userdetails.email, authenticationService.fetchUserCommittees())
     }
 
-    fun getCommitteeById(committeeId: Int): Committee? {
+    fun getCommitteeById(committeeId: String): Committee? {
         return committeeRepository.findById(committeeId).orElse(null)
 
     }

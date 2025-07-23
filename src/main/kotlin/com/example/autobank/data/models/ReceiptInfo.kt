@@ -8,7 +8,7 @@ import java.math.BigDecimal
 import java.time.LocalDateTime
 
 data class ReceiptInfo(
-    val receiptId: Int,
+    val receiptId: String,
     val amount: Double,
     val receiptName: String,
     val receiptDescription: String,
@@ -17,7 +17,7 @@ data class ReceiptInfo(
     val userFullname: String,
     val accountNumber: String?,
     val cardNumber: String?,
-    val userId: Int,
+    val userId: String,
     val attachmentCount: Long,
     val latestReviewStatus: ReceiptStatus?,
     val latestReviewCreatedAt: LocalDateTime?,

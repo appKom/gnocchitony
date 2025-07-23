@@ -11,10 +11,10 @@ import java.time.LocalDateTime
 @Table(name = "receipt")
 class Receipt(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
     @NotNull
-    val id: Int,
+    val id: String,
 
     @Column(name = "amount")
     val amount: Double,

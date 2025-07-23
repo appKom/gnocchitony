@@ -9,11 +9,11 @@ import org.jetbrains.annotations.NotNull
 import java.time.LocalDateTime
 
 data class ReceiptReviewResponseBody (
-    val id: Int,
-    val receiptId: Int,
+    val id: String,
+    val receiptId: String,
     val status: ReceiptStatus,
     val comment: String,
-    val onlineUserId: Int,
+    val onlineUserId: String,
     val createdAt: LocalDateTime? = null
 
 )

@@ -35,7 +35,7 @@ class ReceiptReviewService {
             receiptReviewRepository.deleteByReceiptId(receiptReview.receiptId)
         }
 
-        val savedReview = receiptReviewRepository.save(ReceiptReview(0, receipt, enumValueOf<ReceiptStatus>(receiptReview.status), receiptReview.comment, onlineuser, null))
+        val savedReview = receiptReviewRepository.save(ReceiptReview("", receipt, enumValueOf<ReceiptStatus>(receiptReview.status), receiptReview.comment, onlineuser, null))
 
         return ReceiptReviewResponseBody(
             id = savedReview.id,

@@ -6,7 +6,7 @@ import jakarta.persistence.*
 @Table(name = "committee")
 class Committee (
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Int,
+    @GeneratedValue(strategy = GenerationType.UUID)
+    val id: String,
     val name: String
 )

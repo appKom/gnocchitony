@@ -64,7 +64,7 @@ class ReceiptAdminService {
 
     }
 
-    fun getReceipt(id: Int): CompleteReceipt? {
+    fun getReceipt(id: String): CompleteReceipt? {
         val receipt = receiptInfoRepository.findById(id) ?: return null
 
         return receiptService.getCompleteReceipt(receipt)

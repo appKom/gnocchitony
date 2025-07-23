@@ -43,7 +43,7 @@ class OnlineUserService(
     fun createOnlineUser(): OnlineUser {
             val userinfo: Auth0User = authenticationService.getUserDetails()
             val onlineUser = OnlineUser(
-                id = 0,
+                id = "",
                 onlineId = userinfo.sub,
                 email = userinfo.email,
                 fullname = userinfo.name,
@@ -52,17 +52,6 @@ class OnlineUserService(
             )
 
             return onlineUserRepository.save(onlineUser)
-    }
-
-    fun updateUser(user: OnlineUser) {
-        val existingUser = onlineUserRepository.findByOnlineId(user.onlineId)
-            ?: throw Exception("User not found")
-
-        existingUser.isAdmin = user.isAdmin
-        existingUser.lastUpdated = user.lastUpdated
-
-        onlineUserRepository.save(existingUser)
-
     }
 
 }

@@ -43,7 +43,7 @@ class AdminReceiptController {
     }
 
     @GetMapping("/get/{id}")
-    fun getReceipt(@PathVariable id: Int): ResponseEntity<CompleteReceipt> {
+    fun getReceipt(@PathVariable id: String): ResponseEntity<CompleteReceipt> {
         if (authenticationService.checkAdmin()) {
             return ResponseEntity.ok(receiptAdminService.getReceipt(id))
 

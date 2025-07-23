@@ -1,7 +1,7 @@
 package com.example.autobank.data.receipt
 
 data class ReceiptInfoResponseBody(
-    val receiptId: Int,
+    val receiptId: String,
     val amount: String,
     val receiptName: String,
     val receiptDescription: String,
