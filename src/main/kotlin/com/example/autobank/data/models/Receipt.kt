@@ -21,6 +21,7 @@ class Receipt(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "committee_id")
+    @NotNull
     val committee: Committee,
 
     @Column(name = "name")
@@ -31,6 +32,7 @@ class Receipt(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "onlineuser_id")
+    @NotNull
     val user: OnlineUser,
 
     @OneToMany(mappedBy = "receipt")
@@ -41,6 +43,7 @@ class Receipt(
 
     @CreationTimestamp
     @Column(name = "createdat")
+    @NotNull
     val createdat: LocalDateTime?,
 
     @Column(name = "card_number")

@@ -49,10 +49,12 @@ class Economicrequest(
 
     @CreationTimestamp
     @Column(name = "createdat")
+    @NotNull
     val createdat: LocalDateTime?,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "onlineuser_id")
+    @NotNull
     val user: OnlineUser,
 
     @OneToMany(mappedBy = "economicrequest")

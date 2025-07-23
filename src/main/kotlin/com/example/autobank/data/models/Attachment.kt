@@ -14,9 +14,11 @@ class Attachment(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receipt_id", nullable = false)
+    @NotNull
     val receipt: Receipt,
 
     @Column(name = "name")
+    @NotNull
     val name: String,
 
     )

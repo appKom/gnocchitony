@@ -28,6 +28,7 @@ class EconomicRequestReview (
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
+    @NotNull
     val status: EconomicRequestStatus,
 
     @Column(name = "comment")
@@ -35,9 +36,11 @@ class EconomicRequestReview (
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "onlineuser_id")
+    @NotNull
     val user: OnlineUser,
 
     @CreationTimestamp
     @Column(name = "createdat")
+    @NotNull
     val createdat: LocalDateTime?,
 )

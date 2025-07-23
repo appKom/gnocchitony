@@ -14,9 +14,11 @@ class EconomicRequestAttachment(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "economicrequest_id", nullable = false)
+    @NotNull
     val economicrequest: Economicrequest,
 
     @Column(name = "name")
+    @NotNull
     val name: String,
 
     )
