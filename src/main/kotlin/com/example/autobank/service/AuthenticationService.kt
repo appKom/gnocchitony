@@ -20,7 +20,11 @@ import java.time.LocalDateTime
 
 
 @Service
-class AuthenticationService {
+class AuthenticationService(
+    @Value("\${admincommittee}") private val adminCommittee: String,
+    @Value("\${auth0.domain}") private val domain: String,
+    @Value("\${environment}") private val environment: String,
+) {
 
     private val restTemplate = RestTemplate()
 
@@ -28,21 +32,10 @@ class AuthenticationService {
 
     private val fetchUserCommitteesUrl = "https://old.online.ntnu.no/api/v1/group/online-groups/?members__user="
 
-    private val adminCommitteeNameLong = "Bank- og økonomikomiteen" //"Applikasjonskomiteen" // Temporarily appkom
-
     private val adminRecheckTime = 24 * 60 * 60 * 1000;
 
     @Autowired
     lateinit var onlineUserRepository: OnlineUserRepository
-
-    @Value("\${auth0.domain}")
-    private val domain: String = ""
-
-    @Value("\${environment}")
-    private val environment: String = ""
-
-    @Value("\${superadmin.emails}")
-    private val superadminEmails: String = ""
 
     fun getAuth0User(token: String): Auth0User {
         return Auth0User("sub", "email", "name")
@@ -165,12 +158,15 @@ class AuthenticationService {
         }
 
         val userCommittees = fetchUserCommittees()
-        return userCommittees.contains(adminCommitteeNameLong)
+        return userCommittees.contains(adminCommittee)
     }
 
+    /*
     fun checkSuperAdmin(): Boolean {
         return superadminEmails.split(",").contains(getUserDetails().email)
     }
+    */
+
 
     fun getExpiresAt(): Instant? {
             val authentication = SecurityContextHolder.getContext().authentication

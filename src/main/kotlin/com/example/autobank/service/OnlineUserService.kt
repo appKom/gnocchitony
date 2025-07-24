@@ -37,7 +37,7 @@ class OnlineUserService(
             }
         }
 
-        return AuthenticatedUserResponse(success = true, authenticationService.checkAdmin(), authenticationService.checkSuperAdmin(), expiresat = authenticationService.getExpiresAt(), fullname = authenticationService.getFullName())
+        return AuthenticatedUserResponse(success = true, authenticationService.checkAdmin(), false, expiresat = authenticationService.getExpiresAt(), fullname = authenticationService.getFullName())
     }
 
     fun createOnlineUser(): OnlineUser {
