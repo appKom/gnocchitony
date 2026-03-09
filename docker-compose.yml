@@ -1,0 +1,14 @@
+services:
+  dev-database:
+    image: mysql:8.0
+    container_name: spring-local-mysq
+    environment:
+      MYSQL_ROOT_PASSWORD: gLp(43<Ze1d9
+      MYSQL_DATABASE: autobankdevdb
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_dev_data:/var/lib/mysql
+
+volumes:
+  mysql_dev_data:
