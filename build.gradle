@@ -55,6 +55,7 @@ ext {
     set('kotlinStdlibVersion', '1.8.10')
     set('mysqlConnectorVersion', '9.3.0')
     set('mssqlJdbcVersion', '12.8.1.jre11')
+    set('pdfboxVersion', '3.0.4')
 }
 
 dependencies {
@@ -96,6 +97,7 @@ dependencies {
     implementation "net.coobird:thumbnailator:${thumbnailatorVersion}"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:${kotlinStdlibVersion}"
     implementation "com.mysql:mysql-connector-j:${mysqlConnectorVersion}"
+    implementation "org.apache.pdfbox:pdfbox:${pdfboxVersion}"
 
 }
 

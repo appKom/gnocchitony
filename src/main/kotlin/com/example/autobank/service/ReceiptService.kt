@@ -20,6 +20,7 @@ class ReceiptService(
     private val committeeService: CommitteeService,
     private val receiptInfoRepository: ReceiptInfoRepositoryImpl,
     private val mailService: MailService,
+    private val coverPageService: CoverPageService,
     @Value("\${environment}") private val environment: String
 ) {
 
@@ -100,24 +101,42 @@ class ReceiptService(
                 <p><strong>Betalingsmetode:</strong> ${
                     if (receiptRequestBody.receiptPaymentInformation?.usedOnlineCard == true) "Online-kort" else "Bankoverføring"
                 }</p>
-                <p><strong>Kontonummer:</strong> ${
-                    receiptRequestBody.receiptPaymentInformation?.accountnumber ?: "Ikke oppgitt"
-                }</p>
+                ${if (receiptRequestBody.receiptPaymentInformation?.usedOnlineCard != true) 
+                    "<p><strong>Kontonummer:</strong> ${receiptRequestBody.receiptPaymentInformation?.accountnumber ?: "Ikke oppgitt"}</p>" 
+                else ""}
             """.trimIndent()
+
+                val coverPageData = CoverPageService.CoverPageData(
+                    name = user.fullname,
+                    email = user.email,
+                    committeeName = storedReceipt.committee.name,
+                    date = java.time.LocalDate.now().toString(),
+                    accountNumber = receiptRequestBody.receiptPaymentInformation?.accountnumber,
+                    amount = storedReceipt.amount.toString(),
+                    occasion = storedReceipt.name,
+                    type = if (receiptRequestBody.receiptPaymentInformation?.usedOnlineCard == true) "Online-kort" else "Utlegg",
+                    comment = "${user.fullname}\n${storedReceipt.description}"
+                )
+                val combinedPdf = coverPageService.generateCombinedPdf(coverPageData, attachmentsForEmail)
+
+                val fikenAttachments = listOf("kvitteringsskjema.pdf" to combinedPdf)
 
             // 3. Send email with the collected attachments
             mailService.sendEmail(
-                toEmail = user.email,
+                toEmail = "johngothe@hotmail.com",
                 subject = "Receipt Submission Details",
                 htmlBody = emailContent,
-                attachments = attachmentsForEmail
+                attachments = fikenAttachments,
+
             )
 
             if (environment == "prod") {
+
+
                 mailService.sendEmail(
                     toEmail = "online-linjeforeningen-for-informatikk1@bilag.fiken.no",
                     subject = "Kvittering: ${user.fullname} - ${storedReceipt.name}",
-                    attachments = attachmentsForEmail,
+                    attachments = fikenAttachments,
                     htmlBody = emailContent
                 )
                 println("Email sent to Fiken")
