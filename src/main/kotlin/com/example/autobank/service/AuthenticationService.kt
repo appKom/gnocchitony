@@ -77,7 +77,7 @@ class AuthenticationService(
         if (environment != "prod") {
             val sub = getUserSub()
             // Return mock/minimal user data for local dev
-            return Auth0User(sub, "dev@example.com", "Dev User")
+            return Auth0User(sub, "adelestrysse@gmail.com", "Dev User")
         }
 
         val endpoint = UriComponentsBuilder

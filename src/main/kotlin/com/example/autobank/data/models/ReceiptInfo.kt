@@ -16,7 +16,7 @@ data class ReceiptInfo(
     val committeeName: String,
     val userFullname: String,
     val accountNumber: String?,
-    val cardNumber: String?,
+    val cardUsed: String?,
     val userId: String,
     val attachmentCount: Long,
     val latestReviewStatus: ReceiptStatus?,
