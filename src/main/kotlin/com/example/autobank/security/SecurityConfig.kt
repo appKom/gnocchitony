@@ -1,6 +1,7 @@
 package com.example.autobank.security
 
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
@@ -24,7 +25,11 @@ class SecurityConfig() {
     @Value("\${spring.security.oauth2.resourceserver.jwt.issuer-uri}")
     private val issuer: String = String()
 
+    @Value("\${security.disable-auth:false}")
+    private val disableAuth: Boolean = false
+
     @Bean
+    @ConditionalOnProperty(name = ["security.disable-auth"], havingValue = "false", matchIfMissing = true)
     fun jwtDecoder(): JwtDecoder {
         val jwtDecoder = JwtDecoders.fromOidcIssuerLocation(issuer) as NimbusJwtDecoder
         val audienceValidator: OAuth2TokenValidator<Jwt> = AudienceValidator(audience)
@@ -50,6 +55,18 @@ class SecurityConfig() {
     @Bean
     @Throws(Exception::class)
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
+
+        if (disableAuth) {
+            http
+                .cors { it.configurationSource(corsConfigurationSource()) }
+                .csrf { it.disable() }
+                .authorizeHttpRequests { auth ->
+                    auth.anyRequest().permitAll()
+                }
+
+            return http.build()
+        }
+
         http
             .cors { it.configurationSource(corsConfigurationSource()) }  // Add this
             .csrf { it.disable() }  // Typically disabled for APIs
