@@ -1,10 +1,9 @@
-FROM gradle:8-jdk-alpine AS build
+FROM gradle:8.5-jdk17 AS build
 WORKDIR /app
 COPY . .
-RUN ./gradlew clean bootJar
+RUN ./gradlew --no-daemon clean bootJar
 
-
-FROM openjdk:17
+FROM eclipse-temurin:17-jre
 USER nobody
 WORKDIR /app
 COPY --from=build /app/build/libs/*.jar app.jar

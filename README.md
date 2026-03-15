@@ -7,6 +7,7 @@ Autobank is a Kotlin Spring Boot application designed for managing financial rec
 ### Running the Application
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/appKom/gnocchitony.git
    cd gnocchitony
@@ -20,6 +21,26 @@ Autobank is a Kotlin Spring Boot application designed for managing financial rec
    ```
 
 The application will start on `http://localhost:8080`
+
+### Run with Docker (Database + Backend)
+
+1. (Optional) copy `.env.example` to `.env` and adjust values
+2. Start database + backend:
+   ```bash
+   docker compose up -d --build
+   ```
+
+The backend is available on `http://localhost:${APP_PORT:-8080}`.
+
+### Fast Kotlin Dev Reload in Docker
+
+Use the dev profile to run the app with Gradle continuous mode, so code changes trigger fast restarts without rebuilding the image:
+
+```bash
+docker compose --profile dev up -d dev-database backend-dev
+```
+
+In this mode, the backend is available on `http://localhost:${APP_DEV_PORT:-8081}`.
 
 ## 📋 Features
 
@@ -63,6 +84,7 @@ Authorization: Bearer <access_token>
 ## 🛠️ Development
 
 ### Project Structure
+
 ```
 src/main/kotlin/com/example/autobank/
 ├── controller/          # REST controllers
@@ -94,4 +116,3 @@ For complete API documentation, see [docs/api-routes.md](docs/api-routes.md).
 ## 📄 License
 
 This project is part of NTNU Online's application suite.
-
