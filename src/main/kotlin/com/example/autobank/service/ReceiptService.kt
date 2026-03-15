@@ -135,8 +135,10 @@ class ReceiptService(
 
                 mailService.sendEmail(
                     toEmail = "online-linjeforeningen-for-informatikk1@bilag.fiken.no",
-                    subject = "Kvittering: ${user.fullname} - ${storedReceipt.name}",
-                    attachments = fikenAttachments,
+
+                    subject = "Kvittering: ${storedReceipt.committee.name} - ${user.fullname} - ${storedReceipt.name}",
+                    attachments = attachmentsForEmail,
+
                     htmlBody = emailContent
                 )
                 println("Email sent to Fiken")
