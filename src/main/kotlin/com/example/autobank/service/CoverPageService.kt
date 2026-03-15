@@ -34,22 +34,28 @@ class CoverPageService {
      */
     fun generateCombinedPdf(data: CoverPageData, attachments: List<Pair<String, ByteArray>>): ByteArray {
         val document = PDDocument()
+        val sourceDocuments = mutableListOf<PDDocument>()
 
-        addCoverPage(document, data)
+        try {
+            addCoverPage(document, data)
 
-        for ((filename, bytes) in attachments) {
-            val lowerName = filename.lowercase()
-            when {
-                lowerName.endsWith(".pdf") -> appendPdfPages(document, bytes)
-                lowerName.endsWith(".jpg") || lowerName.endsWith(".jpeg") || lowerName.endsWith(".png") ->
-                    appendImagePage(document, filename, bytes)
-                else -> appendImagePage(document, filename, bytes)
+            for ((filename, bytes) in attachments) {
+                val lowerName = filename.lowercase()
+                when {
+                    lowerName.endsWith(".pdf") -> appendPdfPages(document, bytes, sourceDocuments)
+                    lowerName.endsWith(".jpg") || lowerName.endsWith(".jpeg") || lowerName.endsWith(".png") ->
+                        appendImagePage(document, filename, bytes)
+                    else -> appendImagePage(document, filename, bytes)
+                }
             }
-        }
 
-        val outputStream = ByteArrayOutputStream()
-        document.use { it.save(outputStream) }
-        return outputStream.toByteArray()
+            val outputStream = ByteArrayOutputStream()
+            document.save(outputStream)
+            return outputStream.toByteArray()
+        } finally {
+            sourceDocuments.forEach { it.close() }
+            document.close()
+        }
     }
 
     private fun addCoverPage(document: PDDocument, data: CoverPageData) {
@@ -138,11 +144,11 @@ class CoverPageService {
         }
     }
 
-    private fun appendPdfPages(targetDocument: PDDocument, pdfBytes: ByteArray) {
-        Loader.loadPDF(pdfBytes).use { sourceDoc ->
-            for (page in sourceDoc.pages) {
-                targetDocument.importPage(page)
-            }
+    private fun appendPdfPages(targetDocument: PDDocument, pdfBytes: ByteArray, sourceDocuments: MutableList<PDDocument>) {
+        val sourceDoc = Loader.loadPDF(pdfBytes)
+        sourceDocuments.add(sourceDoc)
+        for (page in sourceDoc.pages) {
+            targetDocument.importPage(page)
         }
     }
 
