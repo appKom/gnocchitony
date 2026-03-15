@@ -79,13 +79,10 @@ All API endpoints require authentication via Bearer token:
 Authorization: Bearer <access_token>
 ```
 
-For local development (`application-local.properties`), token auth is disabled by default with:
+Authentication mode is controlled by the `environment` property:
 
-```properties
-security.disable-auth=true
-```
-
-Set `security.disable-auth=false` to test real JWT/Auth0 locally.
+- `environment=prod`: JWT/Auth0 is required.
+- Any non-prod value (for example `environment=dev`): token auth is disabled for easier local development.
 
 ## 🛠️ Development
 

@@ -1,7 +1,6 @@
 package com.example.autobank.security
 
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
@@ -25,11 +24,10 @@ class SecurityConfig() {
     @Value("\${spring.security.oauth2.resourceserver.jwt.issuer-uri}")
     private val issuer: String = String()
 
-    @Value("\${security.disable-auth:false}")
-    private val disableAuth: Boolean = false
+    @Value("\${environment}")
+    private val environment: String = String()
 
     @Bean
-    @ConditionalOnProperty(name = ["security.disable-auth"], havingValue = "false", matchIfMissing = true)
     fun jwtDecoder(): JwtDecoder {
         val jwtDecoder = JwtDecoders.fromOidcIssuerLocation(issuer) as NimbusJwtDecoder
         val audienceValidator: OAuth2TokenValidator<Jwt> = AudienceValidator(audience)
@@ -56,7 +54,7 @@ class SecurityConfig() {
     @Throws(Exception::class)
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
 
-        if (disableAuth) {
+        if (environment != "prod") {
             http
                 .cors { it.configurationSource(corsConfigurationSource()) }
                 .csrf { it.disable() }
