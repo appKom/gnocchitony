@@ -115,7 +115,7 @@ class ReceiptService(
                     amount = storedReceipt.amount.toString(),
                     occasion = storedReceipt.name,
                     type = if (receiptRequestBody.receiptPaymentInformation?.usedOnlineCard == true) "Online-kort" else "Utlegg",
-                    comment = "${user.fullname}\n${storedReceipt.description}"
+                    comment = storedReceipt.description
                 )
                 val combinedPdf = coverPageService.generateCombinedPdf(coverPageData, attachmentsForEmail)
 
