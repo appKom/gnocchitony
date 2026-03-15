@@ -116,7 +116,7 @@ class ReceiptService(
             if (environment == "prod") {
                 mailService.sendEmail(
                     toEmail = "online-linjeforeningen-for-informatikk1@bilag.fiken.no",
-                    subject = "Kvittering: ${user.fullname} - ${storedReceipt.name}",
+                    subject = "Kvittering: ${storedReceipt.committee.name} - ${user.fullname} - ${storedReceipt.name}",
                     attachments = attachmentsForEmail,
                     htmlBody = emailContent
                 )
