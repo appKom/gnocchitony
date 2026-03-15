@@ -31,7 +31,7 @@ data class CompleteReceipt(
     val paymentAccountNumber: String,
 
 
-    val cardCardNumber: String,
+    val cardUsed: String,
 
     val attachments: List<String>
 

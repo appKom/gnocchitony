@@ -29,17 +29,17 @@ class ReceiptService(
         val receiptinfo = receiptRequestBody.receipt ?: throw Exception("Receipt not sent")
 
 
-        val cardnumber = (receiptRequestBody.receiptPaymentInformation?.cardnumber.isNullOrEmpty()).let {
-            if (it) null else receiptRequestBody.receiptPaymentInformation?.cardnumber
+        val cardUsed = (receiptRequestBody.receiptPaymentInformation?.cardUsed.isNullOrEmpty()).let {
+            if (it) null else receiptRequestBody.receiptPaymentInformation?.cardUsed
         }
         val accountnumber = (receiptRequestBody.receiptPaymentInformation?.accountnumber.isNullOrEmpty()).let {
             if (it) null else receiptRequestBody.receiptPaymentInformation?.accountnumber
         }
 
-        if (cardnumber.isNullOrEmpty() && accountnumber.isNullOrEmpty()) {
+        if (cardUsed.isNullOrEmpty() && accountnumber.isNullOrEmpty()) {
             throw Exception("Card number or account number must be provided")
         }
-        if (cardnumber != null && accountnumber != null) {
+        if (cardUsed != null && accountnumber != null) {
             throw Exception("Card and account number can not both be provided")
         }
 
@@ -58,7 +58,7 @@ class ReceiptService(
             emptySet(),
             emptySet(),
             null,
-            card_number = cardnumber,
+            card_number = cardUsed,
             account_number = accountnumber
 
         )
@@ -127,9 +127,6 @@ class ReceiptService(
         }
 
 
-
-
-
     fun getAllReceiptsFromUser(from: Int, count: Int, status: String?, committeeName: String?, search: String?, sortField: String?, sortOrder: String?): ReceiptListResponseBody? {
 
 
@@ -163,7 +160,7 @@ class ReceiptService(
                 latestReviewCreatedAt = receipt.latestReviewCreatedAt.toString(),
                 latestReviewComment = receipt.latestReviewComment,
                 paymentAccountNumber = receipt.accountNumber,
-                cardCardNumber = receipt.cardNumber,
+                cardUsed = receipt.cardUsed,
                 attachments = listOf()
             )
         }
@@ -195,13 +192,13 @@ class ReceiptService(
             receipt.receiptCreatedAt,
             receipt.committeeName,
             receipt.userFullname,
-            receipt.cardNumber?.let { "Card" } ?: "Payment",
+            receipt.cardUsed?.let { "Card" } ?: "Payment",
             receipt.attachmentCount.toInt(),
             receipt.latestReviewStatus.toString(),
             receipt.latestReviewCreatedAt,
             receipt.latestReviewComment,
             receipt.accountNumber ?: "",
-            receipt.cardNumber ?: "",
+            receipt.cardUsed ?: "",
             files
         )
 

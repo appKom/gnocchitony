@@ -14,6 +14,6 @@ data class ReceiptInfoResponseBody(
     val latestReviewCreatedAt: String?,
     val latestReviewComment: String?,
     val paymentAccountNumber: String?,
-    val cardCardNumber: String?,
+    val cardUsed: String?,
     val attachments: List<String>
 )

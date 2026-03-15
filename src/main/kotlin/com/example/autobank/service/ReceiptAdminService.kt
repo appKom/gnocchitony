@@ -48,7 +48,7 @@ class ReceiptAdminService(
                 latestReviewCreatedAt = receipt.latestReviewCreatedAt.toString(),
                 latestReviewComment = receipt.latestReviewComment,
                 paymentAccountNumber = receipt.accountNumber,
-                cardCardNumber = receipt.cardNumber,
+                cardUsed = receipt.cardUsed,
                 attachments = listOf()
             )
         }

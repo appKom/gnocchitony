@@ -1,7 +1,7 @@
 package com.example.autobank.data.receipt
 
 class ReceiptPaymentInformation (
-    val cardnumber: String?,
+    val cardUsed: String?,
     val accountnumber: String?,
     val usedOnlineCard: Boolean,
 )
