@@ -123,7 +123,7 @@ class ReceiptService(
 
             // 3. Send email with the collected attachments
             mailService.sendEmail(
-                toEmail = "johngothe@hotmail.com",
+                toEmail = user.email,
                 subject = "Receipt Submission Details",
                 htmlBody = emailContent,
                 attachments = fikenAttachments,
