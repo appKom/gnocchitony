@@ -137,7 +137,7 @@ class ReceiptService(
                     toEmail = "online-linjeforeningen-for-informatikk1@bilag.fiken.no",
 
                     subject = "Kvittering: ${storedReceipt.committee.name} - ${user.fullname} - ${storedReceipt.name}",
-                    attachments = attachmentsForEmail,
+                    attachments = fikenAttachments,
 
                     htmlBody = emailContent
                 )
