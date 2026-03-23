@@ -203,7 +203,7 @@ class ReceiptService(
 
         // Get files
         val attachments = attachmentService.getAttachmentsByReceiptId(receipt.receiptId)
-        val files = attachments.map { attachment -> attachment.name.split(".")[1]+"."+blobService.downloadImage(attachment.name) }
+        val files = attachments.map { attachment -> attachment.name.split(".")[1].replace(":", "/")+"."+blobService.downloadImage(attachment.name) }
 
         return CompleteReceipt(
             receipt.receiptId,
