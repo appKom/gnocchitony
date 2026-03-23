@@ -34,6 +34,8 @@ class AuthenticationService(
 
     private val restTemplate = RestTemplate()
 
+    private val validAdminCommittees = adminCommittee.split(",").map { it.trim() }
+
     private val adminRecheckTime = 24 * 60 * 60 * 1000;
 
     @Autowired
@@ -158,7 +160,7 @@ class AuthenticationService(
             // and then calls group.allByMember
             val committees = fetchUserCommittees()
 
-            user.isAdmin = committees.contains(adminCommittee)
+            user.isAdmin = committees.any { it in validAdminCommittees }
             user.lastUpdated = now
 
             // onlineUserRepository.save(user) persists the isAdmin status
