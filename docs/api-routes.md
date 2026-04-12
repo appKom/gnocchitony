@@ -443,7 +443,7 @@ All endpoints may return the following error responses:
 
 ## Rate Limiting
 
-Currently, no rate limiting is implemented. This may be added in future versions.
+100 requests per minute per IP, defined in `application-properties`.
 
 ## Versioning
 
