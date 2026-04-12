@@ -26,20 +26,11 @@ class Economicrequest(
     @Column(name = "date")
     val date: LocalDateTime,
 
-    @Column(name = "duration")
-    val duration: String?,
-
     @Column(name = "description")
     val description: String,
 
     @Column(name = "amount", nullable = false)
     val amount: BigDecimal,
-
-    @Column(name = "personcount")
-    val personCount: Int?,
-
-    @Column(name = "names")
-    val names: String,
 
     @Column(name = "paymentdescription")
     val paymentDescription: String,
