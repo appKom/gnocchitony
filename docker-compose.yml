@@ -3,12 +3,57 @@ services:
     image: mysql:8.0
     container_name: spring-local-mysq
     environment:
-      MYSQL_ROOT_PASSWORD: gLp(43<Ze1d9
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_ROOT_HOST: "%"
       MYSQL_DATABASE: autobankdevdb
-    ports:
-      - "3306:3306"
+    expose:
+      - "3306"
     volumes:
       - mysql_dev_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: autobank-backend
+    depends_on:
+      dev-database:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://dev-database:3306/autobankdevdb?serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ""
+      SPRING_PROFILES_ACTIVE: local
+      PORT: "8080"
+    ports:
+      - "${APP_PORT:-8080}:8080"
+
+  backend-dev:
+    image: gradle:8.5-jdk17
+    container_name: autobank-backend-dev
+    profiles: ["dev"]
+    working_dir: /app
+    depends_on:
+      dev-database:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://dev-database:3306/autobankdevdb?serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ""
+      SPRING_PROFILES_ACTIVE: local
+      PORT: "8080"
+    volumes:
+      - .:/app
+      - gradle_cache:/home/gradle/.gradle
+    command: ["./gradlew", "--no-daemon", "bootRun", "--continuous"]
+    ports:
+      - "${APP_DEV_PORT:-8081}:8080"
 
 volumes:
   mysql_dev_data:
+  gradle_cache:

@@ -30,6 +30,8 @@ class AuthenticationService(
     @Value("\${auth0.domain}") private val domain: String,
     @Value("\${environment}") private val environment: String,
     @Value("\${api.base.domain}") private val apiBaseDomain: String,
+    @Value("\${dev.user.sub:local-dev-user}") private val localDevUserSub: String,
+    @Value("\${dev.user.full-name:Local Dev User}") private val localDevUserFullName: String,
 ) {
 
     private val restTemplate = RestTemplate()
@@ -55,13 +57,15 @@ class AuthenticationService(
         return if (authentication is JwtAuthenticationToken) {
             val token = authentication.token
             token.getClaim("sub")
+        } else if (environment != "prod") {
+            localDevUserSub
         } else {
             ""
         }
     }
 
     fun getFullName(): String {
-       return "";
+         return if (environment != "prod") localDevUserFullName else ""
     }
 
     fun getAccessToken(): String {

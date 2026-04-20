@@ -24,6 +24,9 @@ class SecurityConfig() {
     @Value("\${spring.security.oauth2.resourceserver.jwt.issuer-uri}")
     private val issuer: String = String()
 
+    @Value("\${environment}")
+    private val environment: String = String()
+
     @Bean
     fun jwtDecoder(): JwtDecoder {
         val jwtDecoder = JwtDecoders.fromOidcIssuerLocation(issuer) as NimbusJwtDecoder
@@ -50,6 +53,18 @@ class SecurityConfig() {
     @Bean
     @Throws(Exception::class)
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
+
+        if (environment != "prod") {
+            http
+                .cors { it.configurationSource(corsConfigurationSource()) }
+                .csrf { it.disable() }
+                .authorizeHttpRequests { auth ->
+                    auth.anyRequest().permitAll()
+                }
+
+            return http.build()
+        }
+
         http
             .cors { it.configurationSource(corsConfigurationSource()) }  // Add this
             .csrf { it.disable() }  // Typically disabled for APIs

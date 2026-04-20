@@ -4,22 +4,103 @@ Autobank is a Kotlin Spring Boot application designed for managing financial rec
 
 ## 🚀 Quick Start
 
-### Running the Application
+Use one of these three modes depending on what you want to test.
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/appKom/gnocchitony.git
-   cd gnocchitony
-   ```
+### Copy-Paste Cheatsheet
 
-2. **Configure environment variables**
+```bash
+# Local backend (no token required)
+./gradlew bootRun
 
-3. **Run the application**
-   ```bash
-   ./gradlew bootRun
-   ```
+# Docker backend + database
+docker compose up -d --build
 
-The application will start on `http://localhost:8080`
+# Docker backend + database with live reload
+docker compose --profile dev up -d dev-database backend-dev
+
+# Test production auth mode locally (token required)
+./gradlew bootRun --args='--environment=prod'
+
+# Stop Docker services
+docker compose down
+docker compose --profile dev down
+```
+
+### 1. Local Development (fastest feedback)
+
+```bash
+./gradlew bootRun
+```
+
+What happens:
+
+- Runs backend on port 8080 from your machine.
+- Uses `application-local.properties`.
+- `environment=dev` disables JWT auth, so you can call APIs without a token.
+
+Useful URLs:
+
+- API: `http://localhost:8080`
+- Swagger UI: `http://localhost:8080/swagger-ui/index.html`
+
+### 2. Docker Development (backend + database)
+
+```bash
+docker compose up -d --build
+```
+
+What happens:
+
+- Starts MySQL and backend in containers.
+- Backend is on `http://localhost:8080` (or `APP_PORT` from `.env`).
+- MySQL is internal to Docker network (not published on host).
+- Uses local profile (`SPRING_PROFILES_ACTIVE=local`), so `environment=dev` and no JWT required.
+
+Stop:
+
+```bash
+docker compose down
+```
+
+### 3. Docker Development with Live Reload (Kotlin changes)
+
+```bash
+docker compose --profile dev up -d dev-database backend-dev
+```
+
+What happens:
+
+- Runs backend via Gradle `bootRun --continuous` inside container.
+- Mounts your project into the container.
+- Code changes trigger rebuild/restart automatically.
+- Backend is exposed on `http://localhost:8081` by default (`APP_DEV_PORT`).
+
+Stop:
+
+```bash
+docker compose --profile dev down
+```
+
+### 4. Test Production Auth Locally (require token)
+
+If you want to test real JWT/Auth0 behavior, run with `environment=prod`.
+
+Local JVM:
+
+```bash
+./gradlew bootRun --args='--environment=prod'
+```
+
+Docker:
+
+```bash
+ENVIRONMENT=prod docker compose up -d --build
+```
+
+What changes in prod mode:
+
+- All protected endpoints require Bearer token.
+- Auth0 issuer/audience validation is enforced.
 
 ## 📋 Features
 
@@ -58,11 +139,15 @@ All API endpoints require authentication via Bearer token:
 Authorization: Bearer <access_token>
 ```
 
-**Note**: In development mode (`environment=dev`), security is disabled for easier testing.
+Authentication mode is controlled by `environment`:
+
+- `environment=prod`: JWT/Auth0 is required.
+- Any non-prod value (for example `environment=dev`): token auth is disabled for easier local development.
 
 ## 🛠️ Development
 
 ### Project Structure
+
 ```
 src/main/kotlin/com/example/autobank/
 ├── controller/          # REST controllers
@@ -94,4 +179,3 @@ For complete API documentation, see [docs/api-routes.md](docs/api-routes.md).
 ## 📄 License
 
 This project is part of NTNU Online's application suite.
-
