@@ -75,9 +75,11 @@ class AuthenticationService(
     fun getUserDetails(): Auth0User {
 
         if (environment != "prod") {
+
             val sub = getUserSub()
+
             // Return mock/minimal user data for local dev
-            return Auth0User(sub, "dev@example.com", "Dev User")
+            return Auth0User(sub, "amund.dahlmo.berge@online.ntnu.no", "Dev User", "https://ca.slack-edge.com/T018UHUSG4E-U06LJ0DGCDB-d0914116e82e-512")
         }
 
         val endpoint = UriComponentsBuilder
@@ -104,7 +106,7 @@ class AuthenticationService(
         val user = response.body?.result?.data?.json
             ?: throw Exception("User not found")
 
-        return Auth0User(user.id, user.email, user.name)
+        return Auth0User(user.id, user.email, user.name, user.imageUrl)
     }
 
     fun fetchUserCommittees(): List<String> {
@@ -214,6 +216,7 @@ class AuthenticationService(
         data class User(
             val id: String,
             val email: String,
-            val name: String
+            val name: String,
+            val imageUrl: String?
         )
 }
