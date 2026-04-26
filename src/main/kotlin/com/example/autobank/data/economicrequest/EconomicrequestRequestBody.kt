@@ -10,7 +10,7 @@ data class EconomicrequestDTO(
     val otherInformation: String? = null,
 )
 
-class EconomicrequestRequestBody {
-    val economicrequest: EconomicrequestDTO? = null
-    val attachments: Array<String> = arrayOf()
-}
+data class EconomicrequestRequestBody(
+    val economicrequest: EconomicrequestDTO? = null,
+    val attachments: Array<String> = arrayOf(),
+)

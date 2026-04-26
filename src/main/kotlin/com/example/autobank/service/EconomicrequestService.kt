@@ -8,6 +8,7 @@ import com.example.autobank.repository.EconomicRequestAttachmentRepository
 import com.example.autobank.repository.EconomicrequestInfoRepositoryImpl
 import com.example.autobank.repository.EconomicrequestRepository
 import com.example.autobank.repository.specification.EconomicrequestInfoViewSpecification
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
@@ -27,6 +28,8 @@ class EconomicrequestService(
     @Value("\${environment}") private val environment: String,
 ) {
 
+    private val log = LoggerFactory.getLogger(EconomicrequestService::class.java)
+
     fun createEconomicrequest(requestBody: EconomicrequestRequestBody): EconomicrequestResponseBody {
         val user = onlineUserService.getOnlineUser() ?: throw Exception("User not found")
         val dto = requestBody.economicrequest ?: throw Exception("Economic request not sent")
@@ -45,6 +48,7 @@ class EconomicrequestService(
         )
 
         val storedRequest = economicrequestRepository.save(economicrequest)
+        log.info("Economic request saved with id=${storedRequest.id} for user=${user.id}")
 
         try {
             requestBody.attachments.forEach { file64 ->
@@ -54,6 +58,7 @@ class EconomicrequestService(
                 )
             }
         } catch (e: Exception) {
+            log.error("Attachment upload failed for request id=${storedRequest.id}, rolling back: ${e.message}", e)
             economicrequestRepository.delete(storedRequest)
             throw e
         }
