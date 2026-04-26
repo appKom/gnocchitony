@@ -80,7 +80,7 @@ class AuthenticationService(
             val sub = getUserSub()
             // Return mock/minimal user data for local dev
             // Switch mail to your own email to avoid confusion when testing
-            return Auth0User(sub, "online.appkom@gmail.com", "Dev User")
+            return Auth0User(sub, "matsnyf@stud.ntnu.no", "Dev User")
         }
 
         val endpoint = UriComponentsBuilder

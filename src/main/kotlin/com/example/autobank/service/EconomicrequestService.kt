@@ -67,8 +67,6 @@ class EconomicrequestService(
             <h2>Ny søknad til Utstyrspotten</h2>
             <p><strong>Søker:</strong> ${user.fullname}</p>
             <p><strong>Søkerens e-post:</strong> ${user.email}</p>
-            <p><strong>Søknads-ID:</strong> ${storedRequest.id}</p>
-            <p><strong>Emne:</strong> ${storedRequest.subject}</p>
             <p><strong>Formål:</strong> ${storedRequest.purpose}</p>
             <p><strong>Beskrivelse:</strong> ${storedRequest.description}</p>
             <p><strong>Dato:</strong> ${storedRequest.date}</p>
