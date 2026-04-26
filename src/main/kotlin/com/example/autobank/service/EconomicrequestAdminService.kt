@@ -34,6 +34,8 @@ class EconomicrequestAdminService(
                 amount = info.amount.toString(),
                 economicrequestCreatedAt = info.economicrequestCreatedAt.toString(),
                 userFullname = info.userFullname,
+                committeeName = info.committeeName,
+                onlinemail = info.onlinemail,
                 attachmentCount = info.attachmentCount.toInt(),
                 latestReviewStatus = info.latestReviewStatus?.toString(),
                 latestReviewCreatedAt = info.latestReviewCreatedAt?.toString(),

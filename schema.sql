@@ -46,7 +46,9 @@ CREATE TABLE economicrequest
     paymentdescription varchar(255)   NOT NULL,
     otherinformation   VARCHAR(500),
     createdat          DATETIME       NOT NULL,
-    onlineuser_id      UNIQUEIDENTIFIER             NOT NULL references onlineuser (id)
+    onlineuser_id      UNIQUEIDENTIFIER             NOT NULL references onlineuser (id),
+    committee_id       VARCHAR(255)                 NULL references committee (id),
+    onlinemail         VARCHAR(255)                 NULL
 );
 
 CREATE TABLE receiptreview

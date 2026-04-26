@@ -8,6 +8,8 @@ data class EconomicrequestDTO(
     val amount: Double? = null,
     val paymentDescription: String? = null,
     val otherInformation: String? = null,
+    val committeeId: String? = null,
+    val onlinemail: String? = null,
 )
 
 data class EconomicrequestRequestBody(

@@ -38,10 +38,17 @@ class Economicrequest(
     @Column(name = "otherinformation")
     val otherInformation: String?,
 
+    @Column(name = "onlinemail")
+    val onlinemail: String?,
+
     @CreationTimestamp
     @Column(name = "createdat")
     @NotNull
     val createdat: LocalDateTime?,
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "committee_id")
+    val committee: Committee? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "onlineuser_id")

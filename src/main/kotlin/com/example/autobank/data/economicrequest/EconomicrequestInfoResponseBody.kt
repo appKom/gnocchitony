@@ -8,6 +8,8 @@ data class EconomicrequestInfoResponseBody(
     val amount: String,
     val economicrequestCreatedAt: String,
     val userFullname: String,
+    val committeeName: String?,
+    val onlinemail: String?,
     val attachmentCount: Int,
     val latestReviewStatus: String?,
     val latestReviewCreatedAt: String?,

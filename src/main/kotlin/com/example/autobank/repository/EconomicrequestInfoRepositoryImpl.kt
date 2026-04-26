@@ -1,5 +1,6 @@
 package com.example.autobank.repository
 
+import com.example.autobank.data.models.Committee
 import com.example.autobank.data.models.Economicrequest
 import com.example.autobank.data.models.EconomicrequestInfo
 import com.example.autobank.data.models.EconomicRequestReview
@@ -36,6 +37,7 @@ class EconomicrequestInfoRepositoryImpl(
         val root = cq.from(Economicrequest::class.java)
 
         val userJoin = root.join<Economicrequest, OnlineUser>("user")
+        val committeeJoin = root.join<Economicrequest, Committee>("committee", JoinType.LEFT)
         val attachmentsJoin = root.join<Economicrequest, EconomicRequestAttachment>("attachments", JoinType.LEFT)
         val reviewsJoin = root.join<Economicrequest, EconomicRequestReview>("reviews", JoinType.LEFT)
 
@@ -48,9 +50,11 @@ class EconomicrequestInfoRepositoryImpl(
             root.get<BigDecimal>("amount"),
             root.get<String>("paymentDescription"),
             root.get<String>("otherInformation"),
+            root.get<String>("onlinemail"),
             root.get<LocalDateTime>("createdat"),
             userJoin.get<String>("fullname"),
             userJoin.get<String>("id"),
+            committeeJoin.get<String>("name"),
             cb.countDistinct(attachmentsJoin.get<Int>("id")),
             reviewsJoin.get<String>("status"),
             reviewsJoin.get<LocalDateTime>("createdat"),
@@ -66,9 +70,11 @@ class EconomicrequestInfoRepositoryImpl(
             root.get<BigDecimal>("amount"),
             root.get<String>("paymentDescription"),
             root.get<String>("otherInformation"),
+            root.get<String>("onlinemail"),
             root.get<LocalDateTime>("createdat"),
             userJoin.get<String>("fullname"),
             userJoin.get<String>("id"),
+            committeeJoin.get<String>("name"),
             reviewsJoin.get<String>("status"),
             reviewsJoin.get<LocalDateTime>("createdat"),
             reviewsJoin.get<String>("comment"),

@@ -24,6 +24,7 @@ class EconomicrequestService(
     private val blobService: BlobService,
     private val economicrequestAttachmentRepository: EconomicRequestAttachmentRepository,
     private val economicrequestInfoRepository: EconomicrequestInfoRepositoryImpl,
+    private val committeeService: CommitteeService,
     private val mailService: MailService,
     @Value("\${environment}") private val environment: String,
 ) {
@@ -34,6 +35,10 @@ class EconomicrequestService(
         val user = onlineUserService.getOnlineUser() ?: throw Exception("User not found")
         val dto = requestBody.economicrequest ?: throw Exception("Economic request not sent")
 
+        val committee = dto.committeeId?.let {
+            committeeService.getCommitteeById(it) ?: throw Exception("Committee not found")
+        }
+
         val economicrequest = Economicrequest(
             id = "",
             subject = dto.subject ?: throw Exception("Subject not provided"),
@@ -43,7 +48,9 @@ class EconomicrequestService(
             amount = BigDecimal.valueOf(dto.amount ?: throw Exception("Amount not provided")),
             paymentDescription = dto.paymentDescription ?: throw Exception("Payment description not provided"),
             otherInformation = dto.otherInformation,
+            onlinemail = dto.onlinemail,
             createdat = null,
+            committee = committee,
             user = user,
         )
 
@@ -67,16 +74,18 @@ class EconomicrequestService(
             <h2>Ny søknad til Utstyrspotten</h2>
             <p><strong>Søker:</strong> ${user.fullname}</p>
             <p><strong>Søkerens e-post:</strong> ${user.email}</p>
+            ${if (!storedRequest.onlinemail.isNullOrEmpty()) "<p><strong>Online-mail:</strong> ${storedRequest.onlinemail}</p>" else ""}
             <p><strong>Formål:</strong> ${storedRequest.purpose}</p>
             <p><strong>Beskrivelse:</strong> ${storedRequest.description}</p>
-            <p><strong>Dato:</strong> ${storedRequest.date}</p>
+            <p><strong>Dato:</strong> ${storedRequest.date.toLocalDate()}</p>
             <p><strong>Beløp:</strong> ${storedRequest.amount}</p>
             <p><strong>Betalingsbeskrivelse:</strong> ${storedRequest.paymentDescription}</p>
+            ${if (storedRequest.committee != null) "<p><strong>Komité:</strong> ${storedRequest.committee.name}</p>" else ""}
             ${if (!storedRequest.otherInformation.isNullOrEmpty()) "<p><strong>Annen informasjon:</strong> ${storedRequest.otherInformation}</p>" else ""}
         """.trimIndent()
 
         mailService.sendEmail(
-            toEmail = user.email,
+            toEmail = storedRequest.onlinemail ?: user.email,
             subject = "[Utstyrspotten] Søknad mottatt: ${storedRequest.subject}",
             htmlBody = emailContent,
         )
@@ -116,6 +125,8 @@ class EconomicrequestService(
                 amount = info.amount.toString(),
                 economicrequestCreatedAt = info.economicrequestCreatedAt.toString(),
                 userFullname = info.userFullname,
+                committeeName = info.committeeName,
+                onlinemail = info.onlinemail,
                 attachmentCount = info.attachmentCount.toInt(),
                 latestReviewStatus = info.latestReviewStatus?.toString(),
                 latestReviewCreatedAt = info.latestReviewCreatedAt?.toString(),
@@ -151,6 +162,8 @@ class EconomicrequestService(
             otherInformation = info.otherInformation,
             economicrequestCreatedAt = info.economicrequestCreatedAt,
             userFullname = info.userFullname,
+            committeeName = info.committeeName,
+            onlinemail = info.onlinemail,
             attachmentCount = info.attachmentCount.toInt(),
             latestReviewStatus = info.latestReviewStatus?.toString(),
             latestReviewCreatedAt = info.latestReviewCreatedAt,
