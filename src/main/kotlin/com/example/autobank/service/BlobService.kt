@@ -27,7 +27,10 @@ class BlobService(
     private val blobContainerClient: BlobContainerClient =
         BlobServiceClientBuilder().connectionString(connectionString).buildClient()
             .getBlobContainerClient(containerName)
-            .also { log.info("BlobService: initialized blob client for container '$containerName' in '$environment' environment") }
+            .also {
+                it.createIfNotExists()
+                log.info("BlobService: initialized blob client for container '$containerName' in '$environment' environment")
+            }
 
     fun uploadFile(file64: String): String {
         log.debug("uploadFile: data prefix: ${file64.take(100)}")
